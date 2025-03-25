@@ -5,9 +5,9 @@ import { getRecordEntries } from "../Types/Record";
 
 //Returns the programs this player can create.
 export function getAvailableCreatePrograms(): Program[] {
-  const programs: Program[] = [];
-  for (const [programName, program] of getRecordEntries(Programs)) {
-    const create = program.create;
+  let programs: Program[] = [];
+  for (let [programName, program] of getRecordEntries(Programs)) {
+    let create = program.create;
     // Non-creatable program
     if (create == null) continue;
 
