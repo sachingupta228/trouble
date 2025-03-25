@@ -1,4 +1,4 @@
-export const TerminalHelpText: string[] = [
+export let TerminalHelpText: string[] = [
   "Type 'help name' to learn more about the command ",
   " ",
   '    alias [-g] [name="value"]        Create or display Terminal aliases',
@@ -48,7 +48,7 @@ export const TerminalHelpText: string[] = [
   " ",
 ];
 
-const TemplatedHelpTexts: Record<string, (command: string) => string[]> = {
+let TemplatedHelpTexts: Record<string, (command: string) => string[]> = {
   scriptEditor: (command) => {
     return [
       `Usage: ${command} [file names...] | [glob]`,
@@ -72,7 +72,7 @@ const TemplatedHelpTexts: Record<string, (command: string) => string[]> = {
   },
 };
 
-export const HelpTexts: Record<string, string[]> = {
+export let HelpTexts: Record<string, string[]> = {
   alias: [
     'Usage: alias [-g] [name="value"] ',
     " ",
