@@ -1,0 +1,12 @@
+node_modules/
+
+test/
+dist/
+.app/
+
+.github
+.editorconfig
+
+.dockerignore
+Dockerfile
+docker-compose.yml
