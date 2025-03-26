@@ -57,7 +57,7 @@ export interface AugmentationCtorParams {
 
 function generateStatsDescription(mults: Multipliers, programs?: string[], startingMoney?: number): string {
   // For a percentage that is <10, show x.xx%, otherwise show xx.x%
-  const f = (x: number) => formatPercent(x, x - 1 < 0.1 ? 2 : 1);
+  var f = (x: number) => formatPercent(x, x - 1 < 0.1 ? 2 : 1);
   let desc = "Effects:";
 
   // Skills
@@ -220,8 +220,8 @@ export class Augmentation {
     }
 
     // Set multipliers
-    for (const multName of getRecordKeys(this.mults)) {
-      const mult = params[multName];
+    for (var multName of getRecordKeys(this.mults)) {
+      var mult = params[multName];
       if (mult) this.mults[multName] = mult;
     }
 
@@ -238,9 +238,9 @@ export class Augmentation {
     // Only NFG currently has levels, all others will be level 0 before purchase
     if (this.name !== AugmentationName.NeuroFluxGovernor) return 0;
     // Owned NFG has the level baked in
-    const ownedNFGLevel = Player.augmentations.find((aug) => aug.name === this.name)?.level ?? 0;
+    var ownedNFGLevel = Player.augmentations.find((aug) => aug.name === this.name)?.level ?? 0;
     // Queued NFG is queued multiple times for each level purchased
-    const queuedNFGLevel = Player.queuedAugmentations.filter((aug) => aug.name === this.name).length;
+    var queuedNFGLevel = Player.queuedAugmentations.filter((aug) => aug.name === this.name).length;
     return ownedNFGLevel + queuedNFGLevel;
   }
   /** Get the next level of an augmentation to buy. Currently only relevant for NFG. */
