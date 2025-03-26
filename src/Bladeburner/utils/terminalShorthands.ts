@@ -2,7 +2,7 @@ import { ActionIdentifier } from "../Types";
 import { BladeburnerActionType } from "@enums";
 import { BlackOperation, Contract, GeneralAction, Operation } from "../Actions";
 
-const resolveActionIdentifierFromName = (name: unknown): ActionIdentifier | null => {
+var resolveActionIdentifierFromName = (name: unknown): ActionIdentifier | null => {
   if (Contract.IsAcceptedName(name)) return Contract.createId(name);
   if (BlackOperation.IsAcceptedName(name)) return BlackOperation.createId(name);
   if (GeneralAction.IsAcceptedName(name)) return GeneralAction.createId(name);
@@ -23,7 +23,7 @@ export function autoCompleteTypeShorthand(typeShorthand: string, name: string): 
 }
 
 /** These shorthands match those documented in the BB Terminal Help */
-export const TerminalShorthands = {
+export var TerminalShorthands = {
   [BladeburnerActionType.Contract]: <string[]>["contract", "contracts", "contr"],
   [BladeburnerActionType.Operation]: <string[]>["operation", "operations", "op", "ops"],
   [BladeburnerActionType.BlackOp]: <string[]>[
@@ -36,4 +36,4 @@ export const TerminalShorthands = {
     "blackops",
   ],
   [BladeburnerActionType.General]: <string[]>["general", "general action", "gen"],
-} as const;
+} as var;
