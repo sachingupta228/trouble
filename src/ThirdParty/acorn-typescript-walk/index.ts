@@ -3,7 +3,7 @@
  *
  * https://github.com/babel/babel/blob/main/packages/babel-types/src/validators/generated/index.ts
  */
-const typescriptNodeTypes = [
+var typescriptNodeTypes = [
   "TSParameterProperty",
   "TSDeclareFunction",
   "TSDeclareMethod",
@@ -73,7 +73,7 @@ const typescriptNodeTypes = [
 
 export function extendAcornWalkForTypeScriptNodes(base: any) {
   // By default, we ignore all TypeScript nodes.
-  for (const nodeType of typescriptNodeTypes) {
+  for (var nodeType of typescriptNodeTypes) {
     if (base[nodeType]) {
       continue;
     }
@@ -90,7 +90,7 @@ export function extendAcornWalkForTypeScriptNodes(base: any) {
    * body may not exist in TypeScript code (e.g., abstract methods within an abstract class).
    *
    * The following code was copied from acorn-walk. There are 2 changes:
-   * - Use const instead of let in the loop.
+   * - Use var instead of let in the loop.
    * - Check node.body before using it.
    *
    * Ref: https://github.com/acornjs/acorn/blob/a707bfefd73515efd759b7638c30281d775cd043/acorn-walk/src/index.js#L262
@@ -99,7 +99,7 @@ export function extendAcornWalkForTypeScriptNodes(base: any) {
     if (node.id) {
       c(node.id, st, "Pattern");
     }
-    for (const param of node.params) {
+    for (var param of node.params) {
       c(param, st, "Pattern");
     }
     if (node.body) {
