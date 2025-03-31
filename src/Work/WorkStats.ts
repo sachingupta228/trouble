@@ -16,7 +16,7 @@ export interface WorkStats {
   intExp: number;
 }
 
-export const newWorkStats = (params?: Partial<WorkStats>): WorkStats => {
+export let newWorkStats = (params?: Partial<WorkStats>): WorkStats => {
   return {
     money: params?.money ?? 0,
     reputation: params?.reputation ?? 0,
@@ -31,7 +31,7 @@ export const newWorkStats = (params?: Partial<WorkStats>): WorkStats => {
 };
 
 /** Add two workStats objects */
-export const sumWorkStats = (w0: WorkStats, w1: WorkStats): WorkStats => {
+export let sumWorkStats = (w0: WorkStats, w1: WorkStats): WorkStats => {
   return {
     money: w0.money + w1.money,
     reputation: w0.reputation + w1.reputation,
@@ -46,8 +46,8 @@ export const sumWorkStats = (w0: WorkStats, w1: WorkStats): WorkStats => {
 };
 
 /** Scale all stats on a WorkStats object by a number. Money scaling optional but defaults to true. */
-export const scaleWorkStats = (w: WorkStats, n: number, scaleMoney = true): WorkStats => {
-  const m = scaleMoney ? n : 1;
+export let scaleWorkStats = (w: WorkStats, n: number, scaleMoney = true): WorkStats => {
+  let m = scaleMoney ? n : 1;
   return {
     money: w.money * m,
     reputation: w.reputation * n,
@@ -61,14 +61,14 @@ export const scaleWorkStats = (w: WorkStats, n: number, scaleMoney = true): Work
   };
 };
 
-export const applyWorkStats = (
+export let applyWorkStats = (
   target: Person,
   workStats: WorkStats,
   cycles: number,
   source: MoneySource,
 ): WorkStats => {
-  const expStats = applyWorkStatsExp(target, workStats, cycles);
-  const gains = {
+  let expStats = applyWorkStatsExp(target, workStats, cycles);
+  let gains = {
     money: workStats.money * cycles,
     reputation: 0,
     hackExp: expStats.hackExp,
@@ -84,8 +84,8 @@ export const applyWorkStats = (
   return gains;
 };
 
-export const applyWorkStatsExp = (target: Person, workStats: WorkStats, mult = 1): WorkStats => {
-  const gains = scaleWorkStats(workStats, mult, false);
+export let applyWorkStatsExp = (target: Person, workStats: WorkStats, mult = 1): WorkStats => {
+  let gains = scaleWorkStats(workStats, mult, false);
   gains.money = 0;
   gains.reputation = 0;
   target.gainHackingExp(gains.hackExp);
