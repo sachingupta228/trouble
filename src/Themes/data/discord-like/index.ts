@@ -1,7 +1,7 @@
 import { IPredefinedTheme } from "../../Themes";
 import img1 from "./screenshot.png";
 
-export const Theme: IPredefinedTheme = {
+export let Theme: IPredefinedTheme = {
   name: "Discord-like",
   description: "Discord inspired theme",
   credit: "Thermite",
