@@ -1,7 +1,7 @@
 import { Player } from "@player";
 
 export function calculateIntelligenceBonus(intelligence: number, weight = 1): number {
-  const effectiveIntelligence =
+  let effectiveIntelligence =
     Player.bitNodeOptions.intelligenceOverride !== undefined
       ? Math.min(Player.bitNodeOptions.intelligenceOverride, intelligence)
       : intelligence;
