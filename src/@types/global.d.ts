@@ -1,10 +1,10 @@
 // Defined by webpack on startup or compilation
-declare const __COMMIT_HASH__: string;
-declare const __webpack_public_path__: string;
+declare let __COMMIT_HASH__: string;
+declare let __webpack_public_path__: string;
 
 // When using file-loader, we'll get a path to the resource
 declare module "*.png" {
-  const value: string;
+  let value: string;
   export default value;
 }
 
@@ -20,7 +20,7 @@ declare global {
    * Ref: https://babeljs.io/docs/babel-standalone#internal-packages
    */
   declare module "@babel/standalone" {
-    export const packages: {
+    export let packages: {
       parser: {
         parse: (
           code: string,
@@ -51,8 +51,8 @@ declare global {
 }
 
 module "monaco-vim" {
-  export const initVimMode: (...args: unknown[]) => { dispose: () => void };
-  export const VimMode: {
+  export let initVimMode: (...args: unknown[]) => { dispose: () => void };
+  export let VimMode: {
     Vim: {
       defineEx: (...args: unknown[]) => void;
       mapCommand: (...args: unknown[]) => void;
