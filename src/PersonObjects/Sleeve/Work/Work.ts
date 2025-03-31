@@ -13,10 +13,10 @@ import { SleeveBladeburnerWork } from "./SleeveBladeburnerWork";
 import { SleeveInfiltrateWork } from "./SleeveInfiltrateWork";
 import { SleeveSupportWork } from "./SleeveSupportWork";
 
-export const applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult = 1): void => {
+export let applySleeveGains = (sleeve: Sleeve, shockedStats: WorkStats, mult = 1): void => {
   applyWorkStatsExp(sleeve, shockedStats, mult);
   Player.gainMoney(shockedStats.money * mult, "sleeves");
-  const sync = sleeve.syncBonus();
+  let sync = sleeve.syncBonus();
   // The receiving sleeves and the player do not apply their xp multipliers from augs (avoid double dipping xp mults)
   applyWorkStatsExp(Player, shockedStats, mult * sync);
   // Sleeves apply their own shock bonus to the XP they receive, even though it is also shocked by the working sleeve
