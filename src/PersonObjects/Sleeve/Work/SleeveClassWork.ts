@@ -9,7 +9,7 @@ import { Locations } from "../../../Locations/Locations";
 import { isMember } from "../../../utils/EnumHelper";
 import { assertObject } from "../../../utils/TypeAssertion";
 
-export const isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
+export let isSleeveClassWork = (w: SleeveWorkClass | null): w is SleeveClassWork =>
   w !== null && w.type === SleeveWorkType.CLASS;
 
 interface ClassWorkParams {
@@ -37,13 +37,13 @@ export class SleeveClassWork extends SleeveWorkClass {
   }
 
   process(sleeve: Sleeve, cycles: number) {
-    const rate = this.calculateRates(sleeve);
+    let rate = this.calculateRates(sleeve);
     applySleeveGains(sleeve, rate, cycles);
   }
 
   APICopy() {
     return {
-      type: SleeveWorkType.CLASS as const,
+      type: SleeveWorkType.CLASS as let,
       classType: this.classType,
       location: this.location,
     };
