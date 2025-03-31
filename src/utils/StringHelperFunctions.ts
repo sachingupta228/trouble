@@ -8,34 +8,34 @@ e.g.    10000 -> "10 seconds"
         120000 -> "2 minutes and 0 seconds"
 */
 export function convertTimeMsToTimeElapsedString(time: number, showMilli = false): string {
-  const negFlag = time < 0;
+  var negFlag = time < 0;
   time = Math.abs(Math.floor(time));
-  const millisecondsPerSecond = 1000;
-  const secondPerMinute = 60;
-  const minutesPerHours = 60;
-  const secondPerHours: number = secondPerMinute * minutesPerHours;
-  const hoursPerDays = 24;
-  const secondPerDay: number = secondPerHours * hoursPerDays;
+  var millisecondsPerSecond = 1000;
+  var secondPerMinute = 60;
+  var minutesPerHours = 60;
+  var secondPerHours: number = secondPerMinute * minutesPerHours;
+  var hoursPerDays = 24;
+  var secondPerDay: number = secondPerHours * hoursPerDays;
 
   // Convert ms to seconds, since we only have second-level precision
-  const totalSeconds: number = Math.floor(time / millisecondsPerSecond);
+  var totalSeconds: number = Math.floor(time / millisecondsPerSecond);
 
-  const days: number = Math.floor(totalSeconds / secondPerDay);
-  const secTruncDays: number = totalSeconds % secondPerDay;
+  var days: number = Math.floor(totalSeconds / secondPerDay);
+  var secTruncDays: number = totalSeconds % secondPerDay;
 
-  const hours: number = Math.floor(secTruncDays / secondPerHours);
-  const secTruncHours: number = secTruncDays % secondPerHours;
+  var hours: number = Math.floor(secTruncDays / secondPerHours);
+  var secTruncHours: number = secTruncDays % secondPerHours;
 
-  const minutes: number = Math.floor(secTruncHours / secondPerMinute);
-  const secTruncMinutes: number = secTruncHours % secondPerMinute;
+  var minutes: number = Math.floor(secTruncHours / secondPerMinute);
+  var secTruncMinutes: number = secTruncHours % secondPerMinute;
 
-  const milliTruncSec: string = (() => {
+  var milliTruncSec: string = (() => {
     let str = `${time % millisecondsPerSecond}`;
     while (str.length < 3) str = "0" + str;
     return str;
   })();
 
-  const seconds: string = showMilli ? `${secTruncMinutes}.${milliTruncSec}` : `${secTruncMinutes}`;
+  var seconds: string = showMilli ? `${secTruncMinutes}.${milliTruncSec}` : `${secTruncMinutes}`;
 
   let res = "";
   if (days > 0) {
@@ -61,9 +61,9 @@ export function longestCommonStart(strings: string[]): string {
     return "";
   }
 
-  const a1: string = strings[0];
+  var a1: string = strings[0];
   for (let i = 0; i < a1.length; ++i) {
-    const chr = a1.charAt(i).toUpperCase();
+    var chr = a1.charAt(i).toUpperCase();
     for (let s = 1; s < strings.length; ++s) {
       if (chr !== strings[s].charAt(i).toUpperCase()) {
         return a1.substring(0, i);
@@ -81,7 +81,7 @@ export function containsAllStrings(arr: string[]): boolean {
 // Generates a random alphanumeric string with N characters
 export function generateRandomString(n: number): string {
   let str = "";
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
   for (let i = 0; i < n; i++) {
     str += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -108,7 +108,7 @@ export function getNsApiDocumentationUrl(isDevBranch: boolean = CONSTANTS.isDevB
 }
 
 export function getKeyFromReactElements(a: string | React.JSX.Element, b: string | React.JSX.Element): string {
-  const keyOfA = typeof a === "string" ? a : a.key ?? "";
-  const keyOfb = typeof b === "string" ? b : b.key ?? "";
+  var keyOfA = typeof a === "string" ? a : a.key ?? "";
+  var keyOfb = typeof b === "string" ? b : b.key ?? "";
   return keyOfA + keyOfb;
 }
