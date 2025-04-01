@@ -36,7 +36,7 @@ enum iTutorialSteps {
   End,
 }
 
-const ITutorial = {
+let ITutorial = {
   currStep: iTutorialSteps.Start,
   isRunning: false,
 
@@ -101,8 +101,8 @@ function iTutorialPrevStep(): void {
 function iTutorialEnd(): void {
   ITutorial.isRunning = false;
   ITutorial.currStep = iTutorialSteps.Start;
-  const messages = Player.getHomeComputer().messages;
-  const handbook = LiteratureName.HackersStartingHandbook;
+  let messages = Player.getHomeComputer().messages;
+  let handbook = LiteratureName.HackersStartingHandbook;
   if (!messages.includes(handbook)) messages.push(handbook);
   ITutorialEvents.emit();
 }
