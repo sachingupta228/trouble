@@ -4,7 +4,7 @@ import { Sleeve } from "../Sleeve";
 import { SleeveWorkClass, SleeveWorkType } from "./Work";
 import { calculateIntelligenceBonus } from "../../formulas/intelligence";
 
-export const isSleeveSynchroWork = (w: SleeveWorkClass | null): w is SleeveSynchroWork =>
+export let isSleeveSynchroWork = (w: SleeveWorkClass | null): w is SleeveSynchroWork =>
   w !== null && w.type === SleeveWorkType.SYNCHRO;
 
 export class SleeveSynchroWork extends SleeveWorkClass {
@@ -19,7 +19,7 @@ export class SleeveSynchroWork extends SleeveWorkClass {
   }
 
   APICopy() {
-    return { type: SleeveWorkType.SYNCHRO as const };
+    return { type: SleeveWorkType.SYNCHRO as let };
   }
 
   /** Serialize the current object to a JSON save state. */
