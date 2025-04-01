@@ -5,7 +5,7 @@ import { GoColor } from "@enums";
 import { findEffectiveLibertiesOfNewMove } from "./boardAnalysis";
 import { sleep } from "./goAI";
 
-export const threeByThreePatterns = [
+export var threeByThreePatterns = [
   // 3x3 piece patterns; X,O are color pieces; x,o are any state except the opposite color piece;
   // " " is off the edge of the board; "?" is any state (even off the board)
   [
@@ -85,13 +85,13 @@ export async function findAnyMatchedPatterns(
   smart = true,
   rng: number,
 ) {
-  const boardSize = board[0].length;
-  const patterns = expandAllThreeByThreePatterns();
-  const moves = [];
+  var boardSize = board[0].length;
+  var patterns = expandAllThreeByThreePatterns();
+  var moves = [];
   for (let x = 0; x < boardSize; x++) {
     for (let y = 0; y < boardSize; y++) {
-      const neighborhood = getNeighborhood(board, x, y);
-      const matchedPattern = patterns.find((pattern) => checkMatch(neighborhood, pattern, player));
+      var neighborhood = getNeighborhood(board, x, y);
+      var matchedPattern = patterns.find((pattern) => checkMatch(neighborhood, pattern, player));
 
       if (
         matchedPattern &&
@@ -110,8 +110,8 @@ export async function findAnyMatchedPatterns(
   Returns false if any point does not match the pattern, and true if it matches fully.
  */
 function checkMatch(neighborhood: (PointState | null)[][], pattern: string[], player: GoColor) {
-  const patternArr = pattern.join("").split("");
-  const neighborhoodArray = neighborhood.flat();
+  var patternArr = pattern.join("").split("");
+  var neighborhoodArray = neighborhood.flat();
   return patternArr.every((str, index) => matches(str, neighborhoodArray[index], player));
 }
 
@@ -136,7 +136,7 @@ function getNeighborhood(board: Board, x: number, y: number) {
  * question mark "?" matches anything
  */
 function matches(stringPoint: string, point: PointState | null, player: GoColor) {
-  const opponent = player === GoColor.white ? GoColor.black : GoColor.white;
+  var opponent = player === GoColor.white ? GoColor.black : GoColor.white;
   switch (stringPoint) {
     case "X": {
       return point?.color === player;
@@ -166,13 +166,13 @@ function matches(stringPoint: string, point: PointState | null, player: GoColor)
  * Finds all variations of the pattern list, by expanding it using rotation and mirroring
  */
 function expandAllThreeByThreePatterns() {
-  const rotatedPatterns = [
+  var rotatedPatterns = [
     ...threeByThreePatterns,
     ...threeByThreePatterns.map(rotate90Degrees),
     ...threeByThreePatterns.map(rotate90Degrees).map(rotate90Degrees),
     ...threeByThreePatterns.map(rotate90Degrees).map(rotate90Degrees).map(rotate90Degrees),
   ];
-  const mirroredPatterns = [...rotatedPatterns, ...rotatedPatterns.map(verticalMirror)];
+  var mirroredPatterns = [...rotatedPatterns, ...rotatedPatterns.map(verticalMirror)];
   return [...mirroredPatterns, ...mirroredPatterns.map(horizontalMirror)];
 }
 
