@@ -13,25 +13,25 @@ setPlayer(new PlayerObject());
 
 describe("Go AI tests", () => {
   it("prioritizes capture for Black Hand", async () => {
-    const board = ["XO...", ".....", ".....", ".....", "....."];
-    const boardState = boardStateFromSimpleBoard(board, GoOpponent.TheBlackHand);
-    const move = await getMove(boardState, GoColor.white, GoOpponent.TheBlackHand);
+    let board = ["XO...", ".....", ".....", ".....", "....."];
+    let boardState = boardStateFromSimpleBoard(board, GoOpponent.TheBlackHand);
+    let move = await getMove(boardState, GoColor.white, GoOpponent.TheBlackHand);
 
     expect([move.x, move.y]).toEqual([1, 0]);
   });
 
   it("prioritizes defense for Slum Snakes", async () => {
-    const board = ["OX...", ".....", ".....", ".....", "....."];
-    const boardState = boardStateFromSimpleBoard(board, GoOpponent.SlumSnakes);
-    const move = await getMove(boardState, GoColor.white, GoOpponent.SlumSnakes);
+    let board = ["OX...", ".....", ".....", ".....", "....."];
+    let boardState = boardStateFromSimpleBoard(board, GoOpponent.SlumSnakes);
+    let move = await getMove(boardState, GoColor.white, GoOpponent.SlumSnakes);
 
     expect([move.x, move.y]).toEqual([1, 0]);
   });
 
   it("prioritizes eye creation moves for Illuminati", async () => {
-    const board = ["...O...", "OOOO...", ".......", ".......", ".......", ".......", "......."];
-    const boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus);
-    const move = await getMove(boardState, GoColor.white, GoOpponent.Daedalus, false, 0);
+    let board = ["...O...", "OOOO...", ".......", ".......", ".......", ".......", "......."];
+    let boardState = boardStateFromSimpleBoard(board, GoOpponent.Daedalus);
+    let move = await getMove(boardState, GoColor.white, GoOpponent.Daedalus, false, 0);
 
     expect([move.x, move.y]).toEqual([0, 1]);
   });
