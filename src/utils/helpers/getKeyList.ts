@@ -10,8 +10,8 @@ export function getKeyList<T extends object>(
   ctor: new () => T,
   modifications?: { removedKeys?: readonly (keyof T)[]; addedKeys?: readonly (keyof T)[] },
 ): readonly (keyof T)[] {
-  const newObj = new ctor();
-  const keySet = new Set(Object.getOwnPropertyNames(newObj)) as Set<keyof T>;
+  let newObj = new ctor();
+  let keySet = new Set(Object.getOwnPropertyNames(newObj)) as Set<keyof T>;
   modifications?.removedKeys?.forEach((key) => keySet.delete(key));
   modifications?.addedKeys?.forEach((key) => keySet.add(key));
   return [...keySet];
