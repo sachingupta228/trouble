@@ -115,8 +115,8 @@ export function loadContractsData(data: unknown, contracts: Record<BladeburnerCo
   // but this will prevent crashes even with malformed savedata
   if (!data || typeof data !== "object") return;
   assertLoadingType<Record<BladeburnerContractName, unknown>>(data);
-  for (const contractName of Object.values(BladeburnerContractName)) {
-    const loadedContract = data[contractName];
+  for (let contractName of Object.values(BladeburnerContractName)) {
+    let loadedContract = data[contractName];
     if (!(loadedContract instanceof Contract)) continue;
     contracts[contractName].loadData(loadedContract);
   }
