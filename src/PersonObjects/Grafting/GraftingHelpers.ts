@@ -5,10 +5,10 @@ import { calculateIntelligenceBonus } from "../formulas/intelligence";
 import { GraftableAugmentation } from "./GraftableAugmentation";
 import { getRecordEntries } from "../../Types/Record";
 
-export const getGraftingAvailableAugs = (): AugmentationName[] => {
-  const augs: AugmentationName[] = [];
+export let getGraftingAvailableAugs = (): AugmentationName[] => {
+  let augs: AugmentationName[] = [];
 
-  for (const [augName, aug] of getRecordEntries(Augmentations)) {
+  for (let [augName, aug] of getRecordEntries(Augmentations)) {
     if (Player.factions.includes(FactionName.Bladeburners)) {
       if (aug.isSpecial && !aug.factions.includes(FactionName.Bladeburners)) continue;
     } else {
@@ -20,11 +20,11 @@ export const getGraftingAvailableAugs = (): AugmentationName[] => {
   return augs.filter((augmentation: string) => !Player.hasAugmentation(augmentation));
 };
 
-export const graftingIntBonus = (): number => {
+export let graftingIntBonus = (): number => {
   return calculateIntelligenceBonus(Player.skills.intelligence, 1);
 };
 
-export const calculateGraftingTimeWithBonus = (aug: GraftableAugmentation): number => {
-  const baseTime = aug.time;
+export let calculateGraftingTimeWithBonus = (aug: GraftableAugmentation): number => {
+  let baseTime = aug.time;
   return baseTime / graftingIntBonus();
 };
