@@ -1,62 +1,62 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, ipcMain } = require("electron");
-const zlib = require("zlib");
-const path = require("path");
-const fs = require("fs/promises");
-const { promisify } = require("util");
-const gzip = promisify(zlib.gzip);
-const gunzip = promisify(zlib.gunzip);
+var { app, ipcMain } = require("electron");
+var zlib = require("zlib");
+var path = require("path");
+var fs = require("fs/promises");
+var { promisify } = require("util");
+var gzip = promisify(zlib.gzip);
+var gunzip = promisify(zlib.gunzip);
 
-const greenworks = require("./greenworks");
-const log = require("electron-log");
-const flatten = require("lodash/flatten");
-const Store = require("electron-store");
-const { isBinaryFormat } = require("./saveDataBinaryFormat");
-const store = new Store();
+var greenworks = require("./greenworks");
+var log = require("electron-log");
+var flatten = require("lodash/flatten");
+var Store = require("electron-store");
+var { isBinaryFormat } = require("./saveDataBinaryFormat");
+var store = new Store();
 
 // https://stackoverflow.com/a/69418940
-const dirSize = async (directory) => {
-  const files = await fs.readdir(directory);
-  const stats = files.map((file) => fs.stat(path.join(directory, file)));
+var dirSize = async (directory) => {
+  var files = await fs.readdir(directory);
+  var stats = files.map((file) => fs.stat(path.join(directory, file)));
   return (await Promise.all(stats)).reduce((accumulator, { size }) => accumulator + size, 0);
 };
 
-const getDirFileStats = async (directory) => {
-  const files = await fs.readdir(directory);
-  const stats = files.map((f) => {
-    const file = path.join(directory, f);
+var getDirFileStats = async (directory) => {
+  var files = await fs.readdir(directory);
+  var stats = files.map((f) => {
+    var file = path.join(directory, f);
     return fs.stat(file).then((stat) => ({ file, stat }));
   });
-  const data = await Promise.all(stats);
+  var data = await Promise.all(stats);
   return data;
 };
 
-const getNewestFile = async (directory) => {
-  const data = await getDirFileStats(directory);
+var getNewestFile = async (directory) => {
+  var data = await getDirFileStats(directory);
   return data.sort((a, b) => b.stat.mtime.getTime() - a.stat.mtime.getTime())[0];
 };
 
-const getAllSaves = async (window) => {
-  const rootDirectory = await getSaveFolder(window, true);
-  const data = await fs.readdir(rootDirectory, { withFileTypes: true });
-  const savesPromises = data
+var getAllSaves = async (window) => {
+  var rootDirectory = await getSaveFolder(window, true);
+  var data = await fs.readdir(rootDirectory, { withFileTypes: true });
+  var savesPromises = data
     .filter((e) => e.isDirectory())
     .map((dir) => path.join(rootDirectory, dir.name))
     .map((dir) => getDirFileStats(dir));
-  const saves = await Promise.all(savesPromises);
-  const flat = flatten(saves);
+  var saves = await Promise.all(savesPromises);
+  var flat = flatten(saves);
   return flat;
 };
 
 async function prepareSaveFolders(window) {
-  const rootFolder = await getSaveFolder(window, true);
-  const currentFolder = await getSaveFolder(window);
-  const backupsFolder = path.join(rootFolder, "/_backups");
+  var rootFolder = await getSaveFolder(window, true);
+  var currentFolder = await getSaveFolder(window);
+  var backupsFolder = path.join(rootFolder, "/_backups");
   await prepareFolders(rootFolder, currentFolder, backupsFolder);
 }
 
 async function prepareFolders(...folders) {
-  for (const folder of folders) {
+  for (var folder of folders) {
     try {
       // Making sure the folder exists
       await fs.stat(folder);
@@ -93,7 +93,7 @@ function setCloudEnabledConfig(value) {
 
 async function getSaveFolder(window, root = false) {
   if (root) return path.join(app.getPath("userData"), "/saves");
-  const identifier = window.gameInfo?.player?.identifier ?? "";
+  var identifier = window.gameInfo?.player?.identifier ?? "";
   return path.join(app.getPath("userData"), "/saves", `/${identifier}`);
 }
 
@@ -105,10 +105,10 @@ function isCloudEnabled() {
   if (!greenworks.isCloudEnabledForUser()) return false;
 
   // Let's check the config file to see if it's been overriden
-  const enabledInConf = store.get("cloud-enabled", true);
+  var enabledInConf = store.get("cloud-enabled", true);
   if (!enabledInConf) return false;
 
-  const isAppEnabled = greenworks.isCloudEnabled();
+  var isAppEnabled = greenworks.isCloudEnabled();
   if (!isAppEnabled) greenworks.enableCloud(true);
 
   return true;
@@ -121,23 +121,23 @@ function saveCloudFile(name, content) {
 }
 
 function getFirstCloudFile() {
-  const nbFiles = greenworks.getFileCount();
+  var nbFiles = greenworks.getFileCount();
   if (nbFiles === 0) throw new Error("No files in cloud");
-  const file = greenworks.getFileNameAndSize(0);
+  var file = greenworks.getFileNameAndSize(0);
   log.silly(`Found ${nbFiles} files.`);
   log.silly(`First File: ${file.name} (${file.size} bytes)`);
   return file.name;
 }
 
 function getCloudFile() {
-  const file = getFirstCloudFile();
+  var file = getFirstCloudFile();
   return new Promise((resolve, reject) => {
     greenworks.readTextFromFile(file, resolve, reject);
   });
 }
 
 function deleteCloudFile() {
-  const file = getFirstCloudFile();
+  var file = getFirstCloudFile();
   return new Promise((resolve, reject) => {
     greenworks.deleteFile(file, resolve, reject);
   });
@@ -150,14 +150,14 @@ async function getSteamCloudQuota() {
 }
 
 async function backupSteamDataToDisk(currentPlayerId) {
-  const nbFiles = greenworks.getFileCount();
+  var nbFiles = greenworks.getFileCount();
   if (nbFiles === 0) return;
 
-  const file = greenworks.getFileNameAndSize(0);
-  const previousPlayerId = file.name.replace(".json.gz", "");
+  var file = greenworks.getFileNameAndSize(0);
+  var previousPlayerId = file.name.replace(".json.gz", "");
   if (previousPlayerId !== currentPlayerId) {
-    const backupSaveData = await getSteamCloudSaveData();
-    const backupFile = path.join(app.getPath("userData"), "/saves/_backups", `${previousPlayerId}.json.gz`);
+    var backupSaveData = await getSteamCloudSaveData();
+    var backupFile = path.join(app.getPath("userData"), "/saves/_backups", `${previousPlayerId}.json.gz`);
     await fs.writeFile(backupFile, backupSaveData, "utf8");
     log.debug(`Saved backup game to '${backupFile}`);
   }
@@ -179,7 +179,7 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
     log.error(error);
   }
 
-  const steamSaveName = `${currentPlayerId}.json.gz`;
+  var steamSaveName = `${currentPlayerId}.json.gz`;
 
   /**
    * When we push save file to Steam Cloud, we use greenworks.saveTextToFile. It seems that this method expects a string
@@ -192,7 +192,7 @@ async function pushSaveDataToSteamCloud(saveData, currentPlayerId) {
    *
    * Instead of implementing it, the old code (encoding in base64) is used here for backward compatibility.
    */
-  const content = Buffer.from(saveData).toString("base64");
+  var content = Buffer.from(saveData).toString("base64");
   log.debug(`saveData: ${saveData.length} bytes`);
   log.debug(`Base64 string of saveData: ${content.length} bytes`);
   log.debug(`Saving to Steam Cloud as ${steamSaveName}`);
@@ -212,25 +212,25 @@ async function getSteamCloudSaveData() {
     return Promise.reject("Steam Cloud is not Enabled");
   }
   log.debug(`Fetching Save in Steam Cloud`);
-  const cloudString = await getCloudFile();
+  var cloudString = await getCloudFile();
   // Decode cloudString to get save data back.
-  const saveData = Buffer.from(cloudString, "base64");
+  var saveData = Buffer.from(cloudString, "base64");
   log.debug(`SaveData: ${saveData.length} bytes`);
   return saveData;
 }
 
 async function saveGameToDisk(window, electronGameData) {
-  const currentFolder = await getSaveFolder(window);
+  var currentFolder = await getSaveFolder(window);
   let saveFolderSizeBytes = await getFolderSizeInBytes(currentFolder);
-  const maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
-  const remainingSpaceBytes = maxFolderSizeBytes - saveFolderSizeBytes;
+  var maxFolderSizeBytes = store.get("autosave-quota", 1e8); // 100Mb per playerIndentifier
+  var remainingSpaceBytes = maxFolderSizeBytes - saveFolderSizeBytes;
   log.debug(`Folder Usage: ${saveFolderSizeBytes} bytes`);
   log.debug(`Folder Capacity: ${maxFolderSizeBytes} bytes`);
   log.debug(
     `Remaining: ${remainingSpaceBytes} bytes (${((saveFolderSizeBytes / maxFolderSizeBytes) * 100).toFixed(2)}% used)`,
   );
   let saveData = electronGameData.save;
-  const file = path.join(currentFolder, electronGameData.fileName);
+  var file = path.join(currentFolder, electronGameData.fileName);
   try {
     await fs.writeFile(file, saveData, "utf8");
     log.debug(`Saved Game to '${file}'`);
@@ -239,14 +239,14 @@ async function saveGameToDisk(window, electronGameData) {
     log.error(error);
   }
 
-  const fileStats = await getDirFileStats(currentFolder);
-  const oldestFiles = fileStats
+  var fileStats = await getDirFileStats(currentFolder);
+  var oldestFiles = fileStats
     .sort((a, b) => a.stat.mtime.getTime() - b.stat.mtime.getTime())
     .map((f) => f.file)
     .filter((f) => f !== file);
 
   while (saveFolderSizeBytes > maxFolderSizeBytes && oldestFiles.length > 0) {
-    const fileToRemove = oldestFiles.shift();
+    var fileToRemove = oldestFiles.shift();
     log.debug(`Over Quota -> Removing "${fileToRemove}"`);
     try {
       await fs.unlink(fileToRemove);
@@ -268,14 +268,14 @@ async function saveGameToDisk(window, electronGameData) {
 }
 
 async function loadLastFromDisk(window) {
-  const folder = await getSaveFolder(window);
-  const last = await getNewestFile(folder);
+  var folder = await getSaveFolder(window);
+  var last = await getNewestFile(folder);
   log.debug(`Last modified file: "${last.file}" (${last.stat.mtime.toLocaleString()})`);
   return loadFileFromDisk(last.file);
 }
 
 async function loadFileFromDisk(path) {
-  const buffer = await fs.readFile(path);
+  var buffer = await fs.readFile(path);
   let content;
   if (isBinaryFormat(buffer)) {
     // Save file is in the binary format.
@@ -314,10 +314,10 @@ function pushSaveGameForImport(window, save, automatic) {
 }
 
 async function restoreIfNewerExists(window) {
-  const currentSave = await getCurrentSave(window);
-  const currentData = await getSaveInformation(window, currentSave.save);
-  const steam = {};
-  const disk = {};
+  var currentSave = await getCurrentSave(window);
+  var currentData = await getSaveInformation(window, currentSave.save);
+  var steam = {};
+  var disk = {};
 
   try {
     steam.save = await getSteamCloudSaveData();
@@ -328,7 +328,7 @@ async function restoreIfNewerExists(window) {
   }
 
   try {
-    const saves = (await getAllSaves()).sort((a, b) => b.stat.mtime.getTime() - a.stat.mtime.getTime());
+    var saves = (await getAllSaves()).sort((a, b) => b.stat.mtime.getTime() - a.stat.mtime.getTime());
     if (saves.length > 0) {
       disk.save = await loadFileFromDisk(saves[0].file);
       disk.data = await getSaveInformation(window, disk.save);
@@ -338,7 +338,7 @@ async function restoreIfNewerExists(window) {
     log.debug(error);
   }
 
-  const lowPlaytime = 1000 * 60 * 15;
+  var lowPlaytime = 1000 * 60 * 15;
   let bestMatch;
   if (!steam.data && !disk.data) {
     log.info("No data to import");
