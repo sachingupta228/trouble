@@ -33,7 +33,7 @@ import { breakInfos261 } from "./APIBreaks/2.6.1";
 
 /** Function for performing a series of defined replacements. See 0.58.0 for usage */
 function convert(code: string, changes: [RegExp, string][]): string {
-  for (const change of changes) {
+  for (var change of changes) {
     code = code.replace(change[0], change[1]);
   }
   return code;
@@ -44,9 +44,9 @@ function removeWhitespace(hostname: ServerName, file: ContentFile, files: Conten
   let filename = file.filename.replace(/\s+/g, "-") as ContentFilePath;
   // avoid filename conflicts
   if (files.has(filename)) {
-    const idx = filename.lastIndexOf(".");
-    const path = filename.slice(0, idx);
-    const ext = filename.slice(idx);
+    var idx = filename.lastIndexOf(".");
+    var path = filename.slice(0, idx);
+    var ext = filename.slice(idx);
     let i = 1;
     do {
       filename = `${path}-${i++}${ext}` as ContentFilePath;
@@ -62,7 +62,7 @@ function removeWhitespace(hostname: ServerName, file: ContentFile, files: Conten
 // the game stills works with new versions
 export function evaluateVersionCompatibility(ver: string | number): void {
   // We have to do this because ts won't let us otherwise
-  const anyPlayer = Player as any;
+  var anyPlayer = Player as any;
   if (typeof ver === "string") {
     // This version refactored the Company/job-related code
     if (ver <= "0.41.2") {
@@ -85,15 +85,15 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     }
     if (ver < "0.56.0") {
       // In older versions, keys of AllServers are IP addresses instead of hostnames.
-      for (const server of GetAllServers()) {
+      for (var server of GetAllServers()) {
         renameServer(server.ip, server.hostname);
       }
-      for (const q of anyPlayer.queuedAugmentations) {
+      for (var q of anyPlayer.queuedAugmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
         }
       }
-      for (const q of anyPlayer.augmentations) {
+      for (var q of anyPlayer.augmentations) {
         if (q.name === "Graphene BranchiBlades Upgrade") {
           q.name = "Graphene BrachiBlades Upgrade";
         }
@@ -107,7 +107,7 @@ export function evaluateVersionCompatibility(ver: string | number): void {
         anyPlayer.gang = null;
       }
       // convert all Messages to just filename to save space.
-      const home = anyPlayer.getHomeComputer();
+      var home = anyPlayer.getHomeComputer();
       for (let i = 0; i < home.messages.length; i++) {
         if (home.messages[i].filename) {
           home.messages[i] = home.messages[i].filename;
@@ -115,7 +115,7 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       }
     }
     if (ver < "0.58.0") {
-      const changes: [RegExp, string][] = [
+      var changes: [RegExp, string][] = [
         [/getStockSymbols/g, "stock.getSymbols"],
         [/getStockPrice/g, "stock.getPrice"],
         [/getStockAskPrice/g, "stock.getAskPrice"],
@@ -136,8 +136,8 @@ export function evaluateVersionCompatibility(ver: string | number): void {
         [/purchase4SMarketData/g, "stock.purchase4SMarketData"],
         [/purchase4SMarketDataTixApi/g, "stock.purchase4SMarketDataTixApi"],
       ];
-      for (const server of GetAllServers()) {
-        for (const script of server.scripts.values()) {
+      for (var server of GetAllServers()) {
+        for (var script of server.scripts.values()) {
           script.content = convert(script.code, changes);
         }
       }
@@ -156,7 +156,7 @@ export function evaluateVersionCompatibility(ver: string | number): void {
   }
   if (ver < 9) {
     if (Object.hasOwn(StockMarket, "Joes Guns")) {
-      const s = StockMarket["Joes Guns"];
+      var s = StockMarket["Joes Guns"];
       delete StockMarket["Joes Guns"];
       StockMarket[LocationName.Sector12JoesGuns] = s;
     }
@@ -164,9 +164,9 @@ export function evaluateVersionCompatibility(ver: string | number): void {
   if (ver < 10) {
     // Augmentation name was changed in 0.56.0 but sleeves aug list was missed.
     if (anyPlayer.sleeves && anyPlayer.sleeves.length > 0) {
-      for (const sleeve of anyPlayer.sleeves) {
+      for (var sleeve of anyPlayer.sleeves) {
         if (!sleeve.augmentations || sleeve.augmentations.length === 0) continue;
-        for (const augmentation of sleeve.augmentations) {
+        for (var augmentation of sleeve.augmentations) {
           if (augmentation.name !== "Graphene BranchiBlades Upgrade") continue;
           augmentation.name = "Graphene BrachiBlades Upgrade";
         }
@@ -185,8 +185,8 @@ export function evaluateVersionCompatibility(ver: string | number): void {
   //Fix contract names
   if (ver < 16) {
     //Iterate over all contracts on all servers
-    for (const server of GetAllServers()) {
-      for (const contract of server.contracts) {
+    for (var server of GetAllServers()) {
+      for (var contract of server.contracts) {
         //Rename old "HammingCodes: Integer to encoded Binary" contracts
         //to "HammingCodes: Integer to Encoded Binary"
         if ((contract.type as string) == "HammingCodes: Integer to encoded Binary") {
@@ -196,10 +196,10 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     }
   }
 
-  const v22PlayerBreak = () => {
+  var v22PlayerBreak = () => {
     // reset HP correctly to avoid crash
     anyPlayer.hp = { current: 1, max: 1 };
-    for (const sleeve of anyPlayer.sleeves) {
+    for (var sleeve of anyPlayer.sleeves) {
       sleeve.hp = { current: 1, max: 1 };
     }
 
@@ -217,10 +217,10 @@ export function evaluateVersionCompatibility(ver: string | number): void {
   if (ver < 17) {
     let ownedNFGs = [...Player.augmentations];
     ownedNFGs = ownedNFGs.filter((aug) => aug.name === AugmentationName.NeuroFluxGovernor);
-    const newNFG = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
+    var newNFG = new PlayerOwnedAugmentation(AugmentationName.NeuroFluxGovernor);
     newNFG.level = 0;
 
-    for (const nfg of ownedNFGs) {
+    for (var nfg of ownedNFGs) {
       newNFG.level += nfg.level;
     }
 
@@ -236,9 +236,9 @@ export function evaluateVersionCompatibility(ver: string | number): void {
 
   if (ver < 20) {
     // Create the darkweb for everyone but it won't be linked
-    const dw = GetServer(SpecialServers.DarkWeb);
+    var dw = GetServer(SpecialServers.DarkWeb);
     if (!dw) {
-      const darkweb = safelyCreateUniqueServer({
+      var darkweb = safelyCreateUniqueServer({
         ip: createUniqueRandomIp(),
         hostname: SpecialServers.DarkWeb,
         organizationName: "",
@@ -253,9 +253,9 @@ export function evaluateVersionCompatibility(ver: string | number): void {
   if (ver < 21) {
     // 2.0.0 work rework
     AwardNFG(10);
-    const create = anyPlayer.createProgramName;
+    var create = anyPlayer.createProgramName;
     if (create) Player.getHomeComputer().pushProgram(create);
-    const graft = anyPlayer.graftAugmentationName;
+    var graft = anyPlayer.graftAugmentationName;
     if (graft) Player.augmentations.push({ name: graft, level: 1 });
   }
   if (ver < 22) {
@@ -266,7 +266,7 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     anyPlayer.currentWork = null;
   }
   if (ver < 25) {
-    const removePlayerFields = [
+    var removePlayerFields = [
       "hacking_chance_mult",
       "hacking_speed_mult",
       "hacking_money_mult",
@@ -349,7 +349,7 @@ export function evaluateVersionCompatibility(ver: string | number): void {
       "charisma",
       "intelligence",
     ];
-    const removeSleeveFields = [
+    var removeSleeveFields = [
       "gymStatType",
       "bbAction",
       "bbContract",
@@ -414,16 +414,16 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     let intExp = Number(anyPlayer.intelligence_exp);
     if (isNaN(intExp)) intExp = 0;
     anyPlayer.exp.intelligence += intExp;
-    for (const field of removePlayerFields) {
+    for (var field of removePlayerFields) {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete anyPlayer[field];
     }
-    for (const sleeve of anyPlayer.sleeves) {
-      const anySleeve = sleeve;
+    for (var sleeve of anyPlayer.sleeves) {
+      var anySleeve = sleeve;
       let intExp = Number(anySleeve.intelligence_exp);
       if (isNaN(intExp)) intExp = 0;
       anySleeve.exp.intelligence += intExp;
-      for (const field of removeSleeveFields) {
+      for (var field of removeSleeveFields) {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete sleeve[field];
       }
@@ -431,12 +431,12 @@ export function evaluateVersionCompatibility(ver: string | number): void {
   }
   if (ver < 27) {
     // Prior to v2.2.0, sleeve shock was 0 to 100 internally but displayed as 100 to 0. This unifies them as 100 to 0.
-    for (const sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
+    for (var sleeve of Player.sleeves) sleeve.shock = 100 - sleeve.shock;
   }
   // Some 2.3 changes are actually in BaseServer.js fromJSONBase function
   if (ver < 31) {
     Terminal.warn("Migrating to 2.3.0, loading with no scripts.");
-    for (const server of GetAllServers()) {
+    for (var server of GetAllServers()) {
       // Do not load any saved scripts on migration
       server.savedScripts = [];
     }
@@ -451,7 +451,7 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     }
 
     // Reset corporation to new format.
-    const oldCorp = anyPlayer.corporation;
+    var oldCorp = anyPlayer.corporation;
     if (oldCorp && Array.isArray(oldCorp.divisions)) {
       // Corp needs to be reset to new format, just keep some valuation data
       let valuation = oldCorp.valuation * 2 + oldCorp.revenue * 100;
@@ -467,16 +467,16 @@ export function evaluateVersionCompatibility(ver: string | number): void {
     // Sanitize corporation exports
     let anyExportsFailed = false;
     if (Player.corporation) {
-      for (const division of Player.corporation.divisions.values()) {
-        for (const warehouse of getRecordValues(division.warehouses)) {
-          for (const material of getRecordValues(warehouse.materials)) {
-            const originalExports = material.exports;
+      for (var division of Player.corporation.divisions.values()) {
+        for (var warehouse of getRecordValues(division.warehouses)) {
+          for (var material of getRecordValues(warehouse.materials)) {
+            var originalExports = material.exports;
             // Clear all exports for the material
             material.exports = [];
-            for (const originalExport of originalExports) {
+            for (var originalExport of originalExports) {
               // Throw if there was a failure re-establishing an export
               try {
-                const targetDivision = Player.corporation.divisions.get(originalExport.division);
+                var targetDivision = Player.corporation.divisions.get(originalExport.division);
                 if (!targetDivision) throw new Error(`Target division ${originalExport.division} did not exist`);
                 // Set the export again. ExportMaterial throws on failure
                 exportMaterial(targetDivision, originalExport.city, material, originalExport.amount);
@@ -502,8 +502,8 @@ Error: ${e}`,
   }
   if (ver < 33) {
     // 2.4.0 fixed what should be the last issue with scripts having the wrong server assigned
-    for (const server of GetAllServers()) {
-      for (const script of server.scripts.values()) {
+    for (var server of GetAllServers()) {
+      for (var script of server.scripts.values()) {
         if (script.server !== server.hostname) {
           console.warn(
             `Detected script ${script.filename} on ${server.hostname} with incorrect server property: ${script.server}. Repairing.`,
@@ -514,14 +514,14 @@ Error: ${e}`,
     }
   }
   v2_60: if (ver < 38 && "go" in Player) {
-    const goData = Player.go;
+    var goData = Player.go;
     // Remove outdated savedata
     delete Player.go;
     // Attempt to load back in at least the stats object. The current game will not be loaded.
     if (!goData || typeof goData !== "object") break v2_60;
-    const stats = "status" in goData ? goData.status : "stats" in goData ? goData.stats : null;
+    var stats = "status" in goData ? goData.status : "stats" in goData ? goData.stats : null;
     if (!stats || typeof stats !== "object") break v2_60;
-    const freshSaveData = getGoSave();
+    var freshSaveData = getGoSave();
     Object.assign(freshSaveData.stats, stats);
     loadGo(JSON.stringify(freshSaveData));
   }
@@ -531,13 +531,13 @@ Error: ${e}`,
   if (ver < 42) {
     // All whitespace except for spaces was allowed in filenames
     let found = false;
-    for (const server of GetAllServers()) {
-      for (const script of server.scripts.values()) {
+    for (var server of GetAllServers()) {
+      for (var script of server.scripts.values()) {
         if (!/\s/.test(script.filename)) continue;
         removeWhitespace(server.hostname, script, server.scripts);
         found = true;
       }
-      for (const textFile of server.textFiles.values()) {
+      for (var textFile of server.textFiles.values()) {
         if (!/\s/.test(textFile.filename)) continue;
         removeWhitespace(server.hostname, textFile, server.textFiles);
         found = true;
