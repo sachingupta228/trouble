@@ -80,10 +80,10 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
 
   // Process this Hacknet Server in the game loop. Returns the number of hashes generated
   process(numCycles = 1): number {
-    const seconds = (numCycles * CONSTANTS.MilliPerCycle) / 1000;
+    let seconds = (numCycles * CONSTANTS.MilliPerCycle) / 1000;
     this.onlineTimeSeconds += seconds;
 
-    const hashes = this.hashRate * seconds;
+    let hashes = this.hashRate * seconds;
     this.totalHashesGenerated += hashes;
 
     return hashes;
@@ -144,6 +144,6 @@ export class HacknetServer extends BaseServer implements IHacknetNode {
     return BaseServer.fromJSONBase(value, HacknetServer, includedKeys);
   }
 }
-const includedKeys = BaseServer.getIncludedKeys(HacknetServer);
+let includedKeys = BaseServer.getIncludedKeys(HacknetServer);
 
 constructorsForReviver.HacknetServer = HacknetServer;
