@@ -34,7 +34,7 @@ export class Card {
   }
 
   getStringRepresentation(): string {
-    const value = this.formatValue();
+    let value = this.formatValue();
 
     return `${value} of ${this.suit}`;
   }
