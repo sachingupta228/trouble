@@ -1,8 +1,8 @@
 /* eslint-disable no-process-exit */
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
+var { app, dialog, BrowserWindow, ipcMain, protocol } = require("electron");
 
-const log = require("electron-log");
+var log = require("electron-log");
 log.catchErrors();
 
 // This handler must be set ASAP to prevent ghost processes.
@@ -19,18 +19,18 @@ app.on("window-all-closed", () => {
   process.exit(0);
 });
 
-const greenworks = require("./greenworks");
-const api = require("./api-server");
-const gameWindow = require("./gameWindow");
-const achievements = require("./achievements");
-const utils = require("./utils");
-const storage = require("./storage");
-const debounce = require("lodash/debounce");
-const Store = require("electron-store");
-const store = new Store();
-const path = require("path");
-const { realpathSync } = require("fs");
-const { fileURLToPath } = require("url");
+var greenworks = require("./greenworks");
+var api = require("./api-server");
+var gameWindow = require("./gameWindow");
+var achievements = require("./achievements");
+var utils = require("./utils");
+var storage = require("./storage");
+var debounce = require("lodash/debounce");
+var Store = require("electron-store");
+var store = new Store();
+var path = require("path");
+var { realpathSync } = require("fs");
+var { fileURLToPath } = require("url");
 
 log.transports.file.level = store.get("file-log-level", "info");
 log.transports.console.level = store.get("console-log-level", "debug");
@@ -42,7 +42,7 @@ try {
   if (greenworks && greenworks.init()) {
     log.info("Steam API has been initialized.");
   } else {
-    const error = "Steam API has failed to initialize.";
+    var error = "Steam API has failed to initialize.";
     log.warn(error);
     global.greenworksError = error;
   }
@@ -54,7 +54,7 @@ try {
 let isRestoreDisabled = false;
 
 function setStopProcessHandler(app, window) {
-  const closingWindowHandler = async (e) => {
+  var closingWindowHandler = async (e) => {
     // We need to prevent the default closing event to add custom logic
     e.preventDefault();
 
@@ -98,18 +98,18 @@ function setStopProcessHandler(app, window) {
     }, 200);
   };
 
-  const clearWindowHandler = () => {
+  var clearWindowHandler = () => {
     window = null;
   };
 
-  const receivedGameReadyHandler = async (event, arg) => {
+  var receivedGameReadyHandler = async (event, arg) => {
     if (!window) return log.warn("Window was undefined in game info handler");
 
     log.debug("Received game information", arg);
     window.gameInfo = { ...arg };
     await storage.prepareSaveFolders(window);
 
-    const restoreNewest = store.get("onload-restore-newest", true);
+    var restoreNewest = store.get("onload-restore-newest", true);
     if (restoreNewest && !isRestoreDisabled) {
       try {
         await storage.restoreIfNewerExists(window);
@@ -119,7 +119,7 @@ function setStopProcessHandler(app, window) {
     }
   };
 
-  const receivedDisableRestoreHandler = async (event, arg) => {
+  var receivedDisableRestoreHandler = async (event, arg) => {
     if (!window) return log.warn("Window was undefined in disable import handler");
 
     log.debug(`Disabling auto-restore for ${arg.duration}ms.`);
@@ -130,18 +130,18 @@ function setStopProcessHandler(app, window) {
     }, arg.duration);
   };
 
-  const receivedGameSavedHandler = async (event, arg) => {
+  var receivedGameSavedHandler = async (event, arg) => {
     if (!window) return log.warn("Window was undefined in game saved handler");
 
-    const { save, ...other } = arg;
+    var { save, ...other } = arg;
     log.silly("Received game saved info", { ...other, save: `${save.length} bytes` });
 
     if (storage.isAutosaveEnabled()) {
       saveToDisk(save, arg.fileName);
     }
     if (storage.isCloudEnabled()) {
-      const minimumPlaytime = 1000 * 60 * 15;
-      const playtime = window.gameInfo.player.playtime;
+      var minimumPlaytime = 1000 * 60 * 15;
+      var playtime = window.gameInfo.player.playtime;
       log.silly(window.gameInfo);
       if (playtime > minimumPlaytime) {
         saveToCloud(save);
@@ -151,11 +151,11 @@ function setStopProcessHandler(app, window) {
     }
   };
 
-  const saveToCloud = debounce(
+  var saveToCloud = debounce(
     async (save) => {
       log.debug("Saving to Steam Cloud ...");
       try {
-        const playerId = window.gameInfo.player.identifier;
+        var playerId = window.gameInfo.player.identifier;
         await storage.pushSaveDataToSteamCloud(save, playerId);
         log.silly("Saved Game to Steam Cloud");
       } catch (error) {
@@ -167,11 +167,11 @@ function setStopProcessHandler(app, window) {
     { leading: true },
   );
 
-  const saveToDisk = debounce(
+  var saveToDisk = debounce(
     async (save, fileName) => {
       log.debug("Saving to Disk ...");
       try {
-        const file = await storage.saveGameToDisk(window, { save, fileName });
+        var file = await storage.saveGameToDisk(window, { save, fileName });
         log.silly(`Saved Game to '${file.replaceAll("\\", "\\\\")}'`);
       } catch (error) {
         log.error(error);
@@ -230,13 +230,13 @@ app.on("ready", async () => {
 
   log.info("Application is ready!");
   if (process.argv.includes("--export-save")) {
-    const window = new BrowserWindow({ show: false });
+    var window = new BrowserWindow({ show: false });
     await window.loadFile("export.html");
     window.show();
     setStopProcessHandler(app, window);
     await utils.exportSave(window);
   } else {
-    const window = await startWindow(process.argv.includes("--no-scripts"));
+    var window = await startWindow(process.argv.includes("--no-scripts"));
     if (global.greenworksError) {
       await dialog.showMessageBox(window, {
         title: "Bitburner",
