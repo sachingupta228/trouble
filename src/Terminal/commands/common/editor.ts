@@ -19,7 +19,7 @@ function getScriptTemplate(path: string): string {
   if (hasTextExtension(path) || isLegacyScript(path)) {
     return "";
   }
-  const fileTypeFeature = getFileTypeFeature(getFileType(path));
+  var fileTypeFeature = getFileTypeFeature(getFileType(path));
   if (fileTypeFeature.isTypeScript) {
     return `export async function main(ns: NS) {
 
@@ -38,14 +38,14 @@ export function commonEditor(
   options?: ScriptEditorRouteOptions,
 ): void {
   if (args.length < 1) return Terminal.error(`Incorrect usage of ${command} command. Usage: ${command} [scriptname]`);
-  const files = new Map<ScriptFilePath | TextFilePath, string>();
+  var files = new Map<ScriptFilePath | TextFilePath, string>();
   let hasLegacyScript = false;
-  for (const arg of args) {
-    const pattern = String(arg);
+  for (var arg of args) {
+    var pattern = String(arg);
 
     // Glob of existing files
     if (pattern.includes("*") || pattern.includes("?")) {
-      for (const [path, file] of getGlobbedFileMap(pattern, server, Terminal.currDir)) {
+      for (var [path, file] of getGlobbedFileMap(pattern, server, Terminal.currDir)) {
         if (isLegacyScript(path)) {
           hasLegacyScript = true;
         }
@@ -55,7 +55,7 @@ export function commonEditor(
     }
 
     // Non-glob, files do not need to already exist
-    const path = Terminal.getFilepath(pattern);
+    var path = Terminal.getFilepath(pattern);
     if (!path) return Terminal.error(`Invalid file path ${arg}`);
     if (!hasScriptExtension(path) && !hasTextExtension(path)) {
       return Terminal.error(`${command}: Only scripts or text files can be edited. Invalid file type: ${arg}`);
@@ -63,7 +63,7 @@ export function commonEditor(
     if (isLegacyScript(path)) {
       hasLegacyScript = true;
     }
-    const file = server.getContentFile(path);
+    var file = server.getContentFile(path);
     files.set(path, file ? file.content : getScriptTemplate(path));
   }
   if (hasLegacyScript) {
