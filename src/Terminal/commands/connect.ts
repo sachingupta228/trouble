@@ -11,9 +11,9 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
     return;
   }
 
-  const hostname = String(args[0]);
+  var hostname = String(args[0]);
 
-  const target = GetServer(hostname);
+  var target = GetServer(hostname);
   if (target === null) {
     Terminal.error(`Invalid hostname: '${hostname}'`);
     return;
@@ -21,7 +21,7 @@ export function connect(args: (string | number | boolean)[], server: BaseServer)
 
   // Adjacent servers
   for (let i = 0; i < server.serversOnNetwork.length; i++) {
-    const other = getServerOnNetwork(server, i);
+    var other = getServerOnNetwork(server, i);
     if (other === null) {
       exceptionAlert(
         new Error(
