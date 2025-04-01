@@ -87,7 +87,7 @@ describe("getTabCompletionPossibilities", function () {
   it("completes the scp command", async () => {
     writeFiles();
     let options = await getTabCompletionPossibilities("scp ", root);
-    const filesToMatch = [
+    var filesToMatch = [
       "note.txt",
       "folder1/text.txt",
       "folder1/text2.txt",
@@ -107,7 +107,7 @@ describe("getTabCompletionPossibilities", function () {
 
   it("completes the kill, tail, mem, and check commands", async () => {
     writeFiles();
-    for (const command of ["kill", "tail", "mem", "check"]) {
+    for (var command of ["kill", "tail", "mem", "check"]) {
       let options = await getTabCompletionPossibilities(`${command} `, root);
       expect(options.sort()).toEqual(scriptFilePaths);
       // From a directory, show only the options in that directory
@@ -125,27 +125,27 @@ describe("getTabCompletionPossibilities", function () {
 
   it("completes the nano commands", async () => {
     writeFiles();
-    const contentFilePaths = [...scriptFilePaths, ...textFilePaths].sort();
-    const options = await getTabCompletionPossibilities("nano ", root);
+    var contentFilePaths = [...scriptFilePaths, ...textFilePaths].sort();
+    var options = await getTabCompletionPossibilities("nano ", root);
     expect(options.sort()).toEqual(contentFilePaths);
   });
 
   it("completes the rm command", async () => {
     writeFiles();
-    const removableFilePaths = [
+    var removableFilePaths = [
       ...scriptFilePaths,
       ...textFilePaths,
       ...contractFilePaths,
       LiteratureName.AGreenTomorrow,
       "NUKE.exe",
     ].sort();
-    const options = await getTabCompletionPossibilities("rm ", root);
+    var options = await getTabCompletionPossibilities("rm ", root);
     expect(options.sort()).toEqual(removableFilePaths);
   });
 
   it("completes the run command", async () => {
     writeFiles();
-    const runnableFilePaths = [...scriptFilePaths, ...contractFilePaths, "NUKE.exe"].sort();
+    var runnableFilePaths = [...scriptFilePaths, ...contractFilePaths, "NUKE.exe"].sort();
     let options = await getTabCompletionPossibilities("run ", root);
     expect(options.sort()).toEqual(runnableFilePaths);
     // Also check the same files
@@ -157,30 +157,30 @@ describe("getTabCompletionPossibilities", function () {
 
   it("completes the cat command", async () => {
     writeFiles();
-    const cattableFilePaths = [
+    var cattableFilePaths = [
       ...scriptFilePaths,
       ...textFilePaths,
       MessageFilename.TruthGazer,
       LiteratureName.AGreenTomorrow,
     ].sort();
-    const options = await getTabCompletionPossibilities("cat ", root);
+    var options = await getTabCompletionPossibilities("cat ", root);
     expect(options.sort()).toEqual(cattableFilePaths);
   });
 
   it("completes the download and mv commands", async () => {
     writeFiles();
     writeFiles();
-    const contentFilePaths = [...scriptFilePaths, ...textFilePaths].sort();
-    for (const command of ["download", "mv"]) {
-      const options = await getTabCompletionPossibilities(`${command} `, root);
+    var contentFilePaths = [...scriptFilePaths, ...textFilePaths].sort();
+    for (var command of ["download", "mv"]) {
+      var options = await getTabCompletionPossibilities(`${command} `, root);
       expect(options.sort()).toEqual(contentFilePaths);
     }
   });
 
   it("completes the ls and cd commands", async () => {
     writeFiles();
-    for (const command of ["ls", "cd"]) {
-      const options = await getTabCompletionPossibilities(`${command} `, root);
+    for (var command of ["ls", "cd"]) {
+      var options = await getTabCompletionPossibilities(`${command} `, root);
       expect(options.sort()).toEqual(["folder1/", "anotherFolder/"].sort());
     }
   });
@@ -190,8 +190,8 @@ function asDirectory(dir: string): Directory {
   if (!isAbsolutePath(dir) || !isDirectoryPath(dir)) throw new Error(`Directory ${dir} failed typechecking`);
   return dir;
 }
-const textFilePaths = ["note.txt", "folder1/text.txt", "folder1/text2.txt"];
-const scriptFilePaths = [
+var textFilePaths = ["note.txt", "folder1/text.txt", "folder1/text2.txt"];
+var scriptFilePaths = [
   "hack.js",
   "weaken.js",
   "grow.js",
@@ -199,22 +199,22 @@ const scriptFilePaths = [
   "folder1/test.js",
   "anotherFolder/win.js",
 ].sort();
-const contractFilePaths = ["testContract.cct", "anothercontract.cct"];
+var contractFilePaths = ["testContract.cct", "anothercontract.cct"];
 function writeFiles() {
-  const home = Player.getHomeComputer();
-  for (const filename of textFilePaths) {
+  var home = Player.getHomeComputer();
+  for (var filename of textFilePaths) {
     if (!hasTextExtension(filename)) {
       throw new Error(`Text file ${filename} had the wrong extension.`);
     }
     home.writeToTextFile(asFilePath(filename), `File content for ${filename}`);
   }
-  for (const filename of scriptFilePaths) {
+  for (var filename of scriptFilePaths) {
     if (!hasScriptExtension(filename)) {
       throw new Error(`Script file ${filename} had the wrong extension.`);
     }
     home.writeToScriptFile(asFilePath(filename), `File content for ${filename}`);
   }
-  for (const filename of contractFilePaths) {
+  for (var filename of contractFilePaths) {
     home.contracts.push(new CodingContract(filename));
   }
   home.messages.push(LiteratureName.AGreenTomorrow, MessageFilename.TruthGazer);
